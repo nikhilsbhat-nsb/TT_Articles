@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var TT = require('../models/tt');
+var middleware = require('../middleware');
 
 //Index
 router.get("/", function(req, res) {
@@ -14,7 +15,7 @@ router.get("/", function(req, res) {
 });
 
 //Create
-router.post("/", isLoggedIn,function (req, res) {
+router.post("/", middleware.isLoggedIn,function (req, res) {
     var name= req.body.name;
     var image=req.body.image;
     var desc=req.body.description;
@@ -34,7 +35,7 @@ router.post("/", isLoggedIn,function (req, res) {
 });
 
 //New
-router.get("/new", isLoggedIn,function (req, res) {
+router.get("/new", middleware.isLoggedIn,function (req, res) {
     res.render("tts/new")
 });
 
@@ -51,14 +52,14 @@ router.get("/:id", function (req, res) {
 });
 
 //EDIT TT ROUTE
-router.get("/:id/edit", checkTTOwnership,function (req, res){
+router.get("/:id/edit", middleware.checkTTOwnership,function (req, res){
     TT.findById(req.params.id, function (err, foundTT){
         res.render("tts/edit", {tt: foundTT});
     });
 });
 
 //UPDATE TT ROUTE
-router.put("/:id", checkTTOwnership,function (req, res){
+router.put("/:id", middleware.checkTTOwnership,function (req, res){
     TT.findByIdAndUpdate(req.params.id, req.body.tt, function (err, updatedTT){
         if(err){
             res.redirect("/tt");
@@ -69,7 +70,7 @@ router.put("/:id", checkTTOwnership,function (req, res){
 });
 
 //DESTROY TT ROUTE
-router.delete("/:id", checkTTOwnership,function (req, res) {
+router.delete("/:id", middleware.checkTTOwnership,function (req, res) {
     TT.findByIdAndRemove(req.params.id, function (err){
         if(err){
             res.redirect("/tt");
@@ -79,34 +80,6 @@ router.delete("/:id", checkTTOwnership,function (req, res) {
     });
 });
 
-
-//MIDDLEWARE
-function isLoggedIn(req, res, next){
-    if(req.isAuthenticated()){
-        return next();
-    }else{
-        res.redirect("/login");
-    }
-}
-
-//CHECK OWNERSHIP
-function checkTTOwnership(req, res, next){
-    if(req.isAuthenticated()){
-        TT.findById(req.params.id, function (err, foundTT){
-            if(err){
-                res.redirect('back');
-            }else{
-            if(foundTT.author.id.equals(req.user._id)){
-                next();
-            }else{
-                res.redirect('back');
-            }
-            }
-        });
-    }else{
-        res.redirect("back");
-    }
-}
 
 
 module.exports=router;
