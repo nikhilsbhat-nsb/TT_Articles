@@ -41,12 +41,13 @@ router.get("/new", middleware.isLoggedIn,function (req, res) {
 
 //Show
 router.get("/:id", function (req, res) {
-    TT.findById(req.params.id).populate("comments").exec(function (err, result){
-        if(err){
-            console.log(err);
+    TT.findById(req.params.id).populate("comments").exec(function (err, foundTT){
+        if(err||!foundTT){
+            req.flash("error", "TT Equipment not found");
+            res.redirect("back");
         }else{
-            console.log(result);
-            res.render("tts/show", {tt: result});
+            console.log(foundTT);
+            res.render("tts/show", {tt: foundTT});
         }
     });
 });
