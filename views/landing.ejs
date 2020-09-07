@@ -1,5 +1,29 @@
 <%- include("partials/header") %>
-<h1>Landing Page</h1>
-<a href="tt">View all TT pages</a>
+
+<div class="container">
+    <% if(error && error.length > 0){ %>
+        <div class="alert alert-danger" role="alert">
+            <%= error %>
+        </div>
+    <% } %>
+    <% if(success && success.length > 0){ %>
+        <div class="alert alert-success" role="alert">
+            <%= success %>
+        </div>
+    <% } %>
+</div>
+
+<div id="landing-header">
+    <h1>Welcome to TT Articles!</h1>
+    <a href="/tt" class="btn btn-lg btn-success">View All TT Articles</a>
+</div>
+
+<ul class="slideshow">
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+</ul>
 
 <%- include("partials/footer") %>
