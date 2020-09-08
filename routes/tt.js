@@ -19,11 +19,12 @@ router.post("/", middleware.isLoggedIn,function (req, res) {
     var name= req.body.name;
     var image=req.body.image;
     var desc=req.body.description;
+    var price=req.body.price;
     var author={
         id:req.user._id,
         username:req.user.username
     };
-    var newTT = {name:name,image:image, description:desc, author:author};
+    var newTT = {name:name,price:price,image:image, description:desc, author:author};
 
     TT.create(newTT, function (err, newTT) {
         if(err) {
