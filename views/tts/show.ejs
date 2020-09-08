@@ -17,7 +17,7 @@
                     <h4><a><%= tt.name %></a></h4>
                     <p><%= tt.description %></p>
                     <p>
-                        <em>Submitted by <strong><%= tt.author.username %></strong></em>
+                        <em>Sold by <strong><%= tt.author.username %></strong></em>
                     </p>
                     <% if(currentUser && tt.author.id.equals(currentUser._id)){ %>
                         <a class="btn btn-sm btn-warning" href="/tt/<%= tt._id %>/edit">Edit</a>
